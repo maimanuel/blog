@@ -1,1 +1,1 @@
-Sitemap: https://blog.manuelmai.com//blog/sitemap.xml
+Sitemap: https://blog.manuelmai.com//sitemap.xml
