@@ -13,6 +13,17 @@
   
     
         ,"post1": {
+            "title": "Welcome",
+            "content": "My Pledge . My intention with this blog to capture some of my technical learnings, teachings, and potentially a stream of conciousness. I do not know how frequently I will post or how deeply I will explore certain topics, but I believe it can serve me as a tool to clarify my own thinking, and improve my writing. . My hope is that others, like you, find some portion of this blog useful. Only time will tell if there is any value in this for me or you, so I am not making any big promises. . My commitment is to create at least 5 posts following this one. . Here we go. . Manuel .",
+            "url": "https://blog.manuelmai.com//streamofconciousness/2020/02/20/Welcome.html",
+            "relUrl": "/streamofconciousness/2020/02/20/Welcome.html",
+            "date": " • Feb 20, 2020"
+        }
+        
+    
+  
+    
+        ,"post2": {
             "title": "An Example Markdown Post",
             "content": "Example Markdown Post . Basic setup . Jekyll requires blog post files to be named according to the following format: . YEAR-MONTH-DAY-filename.md . Where YEAR is a four-digit number, MONTH and DAY are both two-digit numbers, and filename is whatever file name you choose, to remind yourself what this post is about. .md is the file extension for markdown files. . The first line of the file should start with a single hash character, then a space, then your title. This is how you create a “level 1 heading” in markdown. Then you can create level 2, 3, etc headings as you wish but repeating the hash character, such as you see in the line ## File names above. . Basic formatting . You can use italics, bold, code font text, and create links. Here’s a footnote 1. Here’s a horizontal rule: . . Lists . Here’s a list: . item 1 | item 2 | . And a numbered list: . item 1 | item 2 | Boxes and stuff . This is a quotation . . You can include alert boxes …and… . . You can include info boxes Images . . Code . You can format text and code per usual . General preformatted text: . # Do a thing do_thing() . Python code and output: . # Prints &#39;2&#39; print(1+1) . 2 . Formatting text as shell commands: . echo &quot;hello world&quot; ./some_script.sh --option &quot;value&quot; wget https://example.com/cat_photo1.png . Formatting text as YAML: . key: value - another_key: &quot;another value&quot; . Tables . Column 1 Column 2 . A thing | Another thing | . Tweetcards . Altair 4.0 is released! https://t.co/PCyrIOTcvvTry it with: pip install -U altairThe full list of changes is at https://t.co/roXmzcsT58 ...read on for some highlights. pic.twitter.com/vWJ0ZveKbZ . &mdash; Jake VanderPlas (@jakevdp) December 11, 2019 Footnotes . This is the footnote. &#8617; . |",
             "url": "https://blog.manuelmai.com//markdown/2020/01/14/test-markdown-post.html",
@@ -29,7 +40,7 @@
   
       ,"page1": {
           "title": "About Me",
-          "content": "This is where you put the contents of your About page. Like all your pages, it’s in Markdown format. . This website is powered by fastpages 1. . a blogging platform that natively supports Jupyter notebooks in addition to other formats. &#8617; . |",
+          "content": "I am a Physics Ph.D. turned Data Scientist and I’m interested in all things AI. . This is my dog. ** 1 . a Her name is Mia. &#8617; . |",
           "url": "https://blog.manuelmai.com//about/",
           "relUrl": "/about/",
           "date": ""
