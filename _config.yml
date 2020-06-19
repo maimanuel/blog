@@ -34,7 +34,7 @@ url: "https://blog.manuelmai.com/" # the base hostname & protocol for your site,
 #
 # 3. You must replace the parameter `baseurl` in _action_files/settings.ini with the same value as you set here but WITHOUT QUOTES.
 #
-baseurl: "/blog" # the subpath of your site, e.g. "/blog".
+baseurl: "" # the subpath of your site, e.g. "/blog".
 
 # Github and twitter are optional:
 minima:
@@ -69,8 +69,8 @@ include:
 # This specifies what badges are turned on by default for notebook posts.
 default_badges:
   github: true
-  binder: true
-  colab: true
+  binder: false
+  colab: false
 
 # Escape HTML in post descriptions
 html_escape:
