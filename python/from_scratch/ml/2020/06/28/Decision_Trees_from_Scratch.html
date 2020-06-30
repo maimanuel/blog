@@ -8,8 +8,8 @@
 <meta property="og:title" content="Decision Trees from Scratch" />
 <meta name="author" content="Manuel Mai" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="This is a first post in a series to build up a random forest regressor from scratch." />
-<meta property="og:description" content="This is a first post in a series to build up a random forest regressor from scratch." />
+<meta name="description" content="This is a first post in a series to build a random forest regressor from scratch." />
+<meta property="og:description" content="This is a first post in a series to build a random forest regressor from scratch." />
 <link rel="canonical" href="https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch.html" />
 <meta property="og:url" content="https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch.html" />
 <meta property="og:site_name" content="Manuel Mai" />
@@ -17,7 +17,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-28T00:00:00-05:00" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Manuel Mai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch.html"},"description":"This is a first post in a series to build up a random forest regressor from scratch.","@type":"BlogPosting","url":"https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch.html","headline":"Decision Trees from Scratch","dateModified":"2020-06-28T00:00:00-05:00","datePublished":"2020-06-28T00:00:00-05:00","image":"https://blog.manuelmai.com//images/tree.png","@context":"https://schema.org"}</script>
+{"author":{"@type":"Person","name":"Manuel Mai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch.html"},"description":"This is a first post in a series to build a random forest regressor from scratch.","@type":"BlogPosting","url":"https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch.html","headline":"Decision Trees from Scratch","dateModified":"2020-06-28T00:00:00-05:00","datePublished":"2020-06-28T00:00:00-05:00","image":"https://blog.manuelmai.com//images/tree.png","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://blog.manuelmai.com//feed.xml" title="Manuel Mai" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -31,8 +31,8 @@
 <meta property="og:title" content="Decision Trees from Scratch" />
 <meta name="author" content="Manuel Mai" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="This is a first post in a series to build up a random forest regressor from scratch." />
-<meta property="og:description" content="This is a first post in a series to build up a random forest regressor from scratch." />
+<meta name="description" content="This is a first post in a series to build a random forest regressor from scratch." />
+<meta property="og:description" content="This is a first post in a series to build a random forest regressor from scratch." />
 <link rel="canonical" href="https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch.html" />
 <meta property="og:url" content="https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch.html" />
 <meta property="og:site_name" content="Manuel Mai" />
@@ -40,7 +40,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-28T00:00:00-05:00" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Manuel Mai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch.html"},"description":"This is a first post in a series to build up a random forest regressor from scratch.","@type":"BlogPosting","url":"https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch.html","headline":"Decision Trees from Scratch","dateModified":"2020-06-28T00:00:00-05:00","datePublished":"2020-06-28T00:00:00-05:00","image":"https://blog.manuelmai.com//images/tree.png","@context":"https://schema.org"}</script>
+{"author":{"@type":"Person","name":"Manuel Mai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch.html"},"description":"This is a first post in a series to build a random forest regressor from scratch.","@type":"BlogPosting","url":"https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch.html","headline":"Decision Trees from Scratch","dateModified":"2020-06-28T00:00:00-05:00","datePublished":"2020-06-28T00:00:00-05:00","image":"https://blog.manuelmai.com//images/tree.png","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -117,7 +117,7 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Decision Trees from Scratch</h1><p class="page-description">This is a first post in a series to build up a random forest regressor from scratch.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-06-28T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Decision Trees from Scratch</h1><p class="page-description">This is a first post in a series to build a random forest regressor from scratch.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-06-28T00:00:00-05:00" itemprop="datePublished">
         Jun 28, 2020
       </time>• 
           <span itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -207,7 +207,7 @@ $${\rm MSE}(y^{\rm true},y^{\rm pred}) = \frac{1}{n}\sum_{i=1}^{n}(y_i^{\rm true
 <p>Why should that be better? Well, consider the case were we have split the rows to the point where each row gets their own prediction. In that case there would be no error at all, but the model would be very specific to the dataset, i.e., if you are row $i$, we predict $y_i^{\rm true}$. This model would be overfit to the data.</p>
 <p>In general, we want to be somewhere in between the extremes, predict more than one value for the entire dataset, but predict fewer values than the exact ones that are given in the training set. In order to get there, we split the data some number of times, how often is controlled by a hyperparameter of the model.</p>
 <blockquote>
-<p>The decision tree is the sequence of splits that divide the dataset into groups, such that each element of the group can be better approximated by the group mean of targets, than before the split.</p>
+<p>The decision tree is hierarchical structure of splits that divide the dataset into groups, such that each element of the new groups can be better approximated by the group mean of targets, than by the mean of targets of the combined groups before the split.</p>
 </blockquote>
 <h2 id="How-to-Choose-the-Splits?">
 <a class="anchor" href="#How-to-Choose-the-Splits?" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to Choose the Splits?<a class="anchor-link" href="#How-to-Choose-the-Splits?"> </a>
@@ -507,19 +507,6 @@ We will do the optimization in a later post. For now, let's convince ourselves t
     
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">plot_tree</span><span class="p">(</span><span class="n">rf</span><span class="o">.</span><span class="n">estimators_</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">filled</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">'tree.png'</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
