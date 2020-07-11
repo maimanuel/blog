@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Decision Trees from Scratch Part 2 | Manuel Mai</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Decision Trees from Scratch Part 2" />
+<meta name="author" content="Manuel Mai" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This is the second post in a series to build a random forest regressor from scratch. In this post we will add a predict method to our DecisionTree class." />
+<meta property="og:description" content="This is the second post in a series to build a random forest regressor from scratch. In this post we will add a predict method to our DecisionTree class." />
+<link rel="canonical" href="https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch_Part_2.html" />
+<meta property="og:url" content="https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch_Part_2.html" />
+<meta property="og:site_name" content="Manuel Mai" />
+<meta property="og:image" content="https://blog.manuelmai.com//images/crystal_ball.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-28T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Manuel Mai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch_Part_2.html"},"description":"This is the second post in a series to build a random forest regressor from scratch. In this post we will add a predict method to our DecisionTree class.","@type":"BlogPosting","url":"https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch_Part_2.html","headline":"Decision Trees from Scratch Part 2","dateModified":"2020-06-28T00:00:00-05:00","datePublished":"2020-06-28T00:00:00-05:00","image":"https://blog.manuelmai.com//images/crystal_ball.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://blog.manuelmai.com//feed.xml" title="Manuel Mai" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-170134985-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Decision Trees from Scratch Part 2 | Manuel Mai</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Decision Trees from Scratch Part 2" />
+<meta name="author" content="Manuel Mai" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This is the second post in a series to build a random forest regressor from scratch. In this post we will add a predict method to our DecisionTree class." />
+<meta property="og:description" content="This is the second post in a series to build a random forest regressor from scratch. In this post we will add a predict method to our DecisionTree class." />
+<link rel="canonical" href="https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch_Part_2.html" />
+<meta property="og:url" content="https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch_Part_2.html" />
+<meta property="og:site_name" content="Manuel Mai" />
+<meta property="og:image" content="https://blog.manuelmai.com//images/crystal_ball.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-28T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Manuel Mai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch_Part_2.html"},"description":"This is the second post in a series to build a random forest regressor from scratch. In this post we will add a predict method to our DecisionTree class.","@type":"BlogPosting","url":"https://blog.manuelmai.com//python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch_Part_2.html","headline":"Decision Trees from Scratch Part 2","dateModified":"2020-06-28T00:00:00-05:00","datePublished":"2020-06-28T00:00:00-05:00","image":"https://blog.manuelmai.com//images/crystal_ball.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://blog.manuelmai.com//feed.xml" title="Manuel Mai" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-170134985-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Manuel Mai</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Decision Trees from Scratch Part 2</h1><p class="page-description">This is the second post in a series to build a random forest regressor from scratch. In this post we will add a predict method to our DecisionTree class.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-06-28T00:00:00-05:00" itemprop="datePublished">
+        Jun 28, 2020
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Manuel Mai</span></span>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      4 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#python">python</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#from_scratch">from_scratch</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#ml">ml</a>
+        
+      
+      </p>
+    
+
+    
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#Introduction">Introduction </a></li>
+<li class="toc-entry toc-h2"><a href="#Predicting-a-Sample">Predicting a Sample </a></li>
+<li class="toc-entry toc-h2"><a href="#Completed-Class">Completed Class </a></li>
+<li class="toc-entry toc-h1"><a href="#Test-on-Synthetic-Data">Test on Synthetic Data </a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#Next-up">Next up </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Photo-Credit">Photo Credit </a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-06-28-Decision_Trees_from_Scratch_Part_2.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Introduction">
+<a class="anchor" href="#Introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction<a class="anchor-link" href="#Introduction"> </a>
+</h2>
+<p>In the <a href="https://blog.manuelmai.com/python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch.html">previous post</a> we developed a simple, non-optimized version of a fitting method for a decision tree for regression. In this post we will add a <code>predict</code> method.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Predicting-a-Sample">
+<a class="anchor" href="#Predicting-a-Sample" aria-hidden="true"><span class="octicon octicon-link"></span></a>Predicting a Sample<a class="anchor-link" href="#Predicting-a-Sample"> </a>
+</h2>
+<p>We are focused on the regression problem here, so predicting the <code>y</code> value of a sample row <code>x</code> means tracing the tree based on the splits and then predicting <code>self.value</code> once we reach a leaf node.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">predict_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">row</span><span class="p">):</span>
+    <span class="c1"># assume 'row' is a DF row or numpy array</span>
+    <span class="c1"># check if it's a leaf node, then return mean of y for this node</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s1">'inf'</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+    <span class="c1"># Otherwise check variable split and move down the correct branch of the tree</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">var</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
+    <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">predict_row</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+</pre></div>
+<p>The <code>predict_row(x)</code> method is written recursively and we start with the behavior at a leaf node, because it's very easy. If we are at the leaf node, we simply predict <code>sel.val</code> of that node which was set up to be the mean <code>y</code> of all training samples that ended up in this node. If we are not at a leaf node, we need to go deeper down the tree.</p>
+<p>The way we do it is to trace down the variable split for this node, which will exist by definition because we are not at a leaf node. The index of the split variable is stored in <code>self.var</code> and the split value in <code>self.split</code>. We now have all the pieces in place to go down the proper branch of the tree. If the split variable <code>x[self.var]</code> is less than or equal to the split value <code>self.split</code> we go to the left sub-tree a call <code>predict_row</code> on that node, otherwise we will go right.</p>
+<p>That is all the recursion does. It will go down the tree until eventually we hit a leaf node and we return <code>self.value</code> as the prediction for this particular row <code>x</code>.</p>
+<p>Now the final step to do is to implement prediction on an entire <code>DataFrame</code> x. The idea is very simple. The predict method will just return an array of all the predictions for each row.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_row</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Completed-Class">
+<a class="anchor" href="#Completed-Class" aria-hidden="true"><span class="octicon octicon-link"></span></a>Completed Class<a class="anchor-link" href="#Completed-Class"> </a>
+</h2>
+<p>Let's take a look at the completed class that we have assembled so far.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">sum_squares</span><span class="p">(</span><span class="n">x_vals</span><span class="p">,</span><span class="n">x_sq</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x_sq</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x_vals</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> 
+
+<span class="k">class</span> <span class="nc">DecisionTree</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">idxs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">min_leaf_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">max_tree_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">min_leaf_size</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">max_tree_depth</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">min_leaf_size</span><span class="p">,</span><span class="n">max_tree_depth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> <span class="k">if</span> <span class="n">idxs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">idxs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_rows</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idxs</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idxs</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">'inf'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">find_varsplit</span><span class="p">()</span>
+    
+    <span class="c1">#go through all variables and find a variable split </span>
+    <span class="k">def</span> <span class="nf">find_varsplit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_tree_depth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cols</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_better_split</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s1">'inf'</span><span class="p">):</span> <span class="k">return</span> <span class="c1"># no split was found</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">DecisionTree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">left_idxs</span><span class="p">,</span><span class="n">max_tree_depth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_tree_depth</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">DecisionTree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">right_idxs</span><span class="p">,</span><span class="n">max_tree_depth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_tree_depth</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            
+    <span class="c1"># find a split that achieves a lower score than the one we already have</span>
+    <span class="k">def</span> <span class="nf">find_better_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">i</span><span class="p">):</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idxs</span><span class="p">]</span>
+        <span class="n">y_sq</span> <span class="o">=</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span>
+        <span class="n">col_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idxs</span><span class="p">,</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">x_val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idxs</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+            <span class="n">left_ss</span><span class="p">,</span><span class="n">right_ss</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">'inf'</span><span class="p">),</span><span class="nb">float</span><span class="p">(</span><span class="s1">'inf'</span><span class="p">)</span>
+            <span class="n">f_left</span> <span class="o">=</span> <span class="n">col_data</span> <span class="o">&lt;=</span> <span class="n">x_val</span>
+            <span class="n">f_right</span> <span class="o">=</span> <span class="n">col_data</span> <span class="o">&gt;</span> <span class="n">x_val</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">f_left</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">left_ss</span> <span class="o">=</span> <span class="n">sum_squares</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">f_left</span><span class="p">],</span><span class="n">y_sq</span><span class="p">[</span><span class="n">f_left</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">f_right</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">right_ss</span> <span class="o">=</span> <span class="n">sum_squares</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">f_right</span><span class="p">],</span><span class="n">y_sq</span><span class="p">[</span><span class="n">f_right</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">&gt;</span> <span class="n">left_ss</span><span class="o">+</span><span class="n">right_ss</span><span class="p">:</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">var</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span> <span class="o">=</span> <span class="n">left_ss</span><span class="o">+</span><span class="n">right_ss</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">x_val</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">left_idxs</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">right_idxs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idxs</span><span class="p">[</span><span class="n">f_left</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">idxs</span><span class="p">[</span><span class="n">f_right</span><span class="p">]</span>
+    
+    <span class="c1"># predict y values for a data frame x</span>
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_row</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()])</span>
+
+    <span class="k">def</span> <span class="nf">predict_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">row</span><span class="p">):</span>
+        <span class="c1"># assume 'row' is a DF row</span>
+        <span class="c1"># check if it's a leaf node, then return mean of y for this node</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s1">'inf'</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">val</span>
+        <span class="c1"># Otherwise check variable split and move down the correct branch of the tree</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">var</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
+        <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">predict_row</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    
+    <span class="c1">#print a nice representation of the tree instance</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'val: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">val</span><span class="si">}</span><span class="s1">, n_rows: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_rows</span><span class="si">}</span><span class="s1">, n_cols: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cols</span><span class="si">}</span><span class="s1">'</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">'inf'</span><span class="p">):</span>
+            <span class="n">s</span><span class="o">+=</span> <span class="sa">f</span><span class="s1">', var: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">var</span><span class="p">]</span><span class="si">}</span><span class="s1">, split: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="si">}</span><span class="s1">'</span>
+        <span class="k">return</span> <span class="n">s</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>When we initialize the class with data <code>x,y</code> we start fitting a tree. Now we can use a validation or test set and predict new values <code>y_new</code> from a new input set <code>x_new</code> by <code>calling predict(x_new)</code>, pretty cool! Let's try it out.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Test-on-Synthetic-Data">
+<a class="anchor" href="#Test-on-Synthetic-Data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Test on Synthetic Data<a class="anchor-link" href="#Test-on-Synthetic-Data"> </a>
+</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Generate a synthetic data set and split into train and test sets.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">x</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'x'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">'x0'</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="s1">'x1'</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="s1">'x2'</span><span class="p">]</span><span class="o">*</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span>
+
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">100</span><span class="p">:]</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">100</span><span class="p">:]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">DT</span> <span class="o">=</span> <span class="n">DecisionTree</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">max_tree_depth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">DT</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's visually inspect the predictions.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">y_pred</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'$y_{</span><span class="se">\\</span><span class="s1">rm test}$'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'$y_{</span><span class="se">\\</span><span class="s1">rm pred}$'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Prediction vs. Test Labels'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Text(0.5, 1.0, 'Prediction vs. Test Labels')</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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%0A">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This looks like a great success! We have achieved a high correlation, and we will quantify the performance on real data once we optimize the fitting procedure.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Next-up">
+<a class="anchor" href="#Next-up" aria-hidden="true"><span class="octicon octicon-link"></span></a>Next up<a class="anchor-link" href="#Next-up"> </a>
+</h2>
+<p>Optimizing the time complexity and assembling the Random Forest.</p>
+<h4 id="Photo-Credit">
+<a class="anchor" href="#Photo-Credit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Photo Credit<a class="anchor-link" href="#Photo-Credit"> </a>
+</h4>
+<p><span>Photo by <a href="https://unsplash.com/@lazycreekimages?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Michael Dziedzic</a> on <a href="https://unsplash.com/s/photos/predict?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span></p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="maimanuel/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/python/from_scratch/ml/2020/06/28/Decision_Trees_from_Scratch_Part_2.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personal Blog</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/maimanuel" title="maimanuel"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/manuelmai5" title="manuelmai5"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
